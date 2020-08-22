@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const datos = require('./datos.json');
+const { getImages } = require('./models');
 
 function index(req, res) {
   fs.readFile('./views/index.html', (err, data) => {
@@ -36,10 +38,21 @@ function static(req, res) {
   });
 }
 
+function dotCom(req, res) {
+  res.write(JSON.stringify(datos));
+  res.end();
+}
+
+function api(req, res) {
+  const images = getImages();
+  res.write(images);
+  res.end();
+}
+
 function notFound(req, res) {
   res.writeHead(404);
   res.write('No se encontro el recurso solicitado');
   res.end();
 }
 
-module.exports = { index, static, notFound };
+module.exports = { index, static, dotCom, api, notFound };
